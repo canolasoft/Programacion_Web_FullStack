@@ -15,20 +15,10 @@
         <h1>🔬Testing automatizado</h1>
         <p>Esta es una prueba automatizada de las funcionalidades de la API RESTful.</p>
         <hr>
-        <p class="d-inline">
-            Prueba 1: Registro de usuario. Resultado: <strong id="testresult-1"></strong>
-            <div id="spinner-1" class="spinner-border text-primary" role="status"></div>
-        </p>
-        <p class="d-inline">
-            Prueba 2: Login de usuario. Resultado: <strong id="testresult-2"></strong>
-            <div id="spinner-2" class="spinner-border text-primary" role="status"></div>
-        </p>
-        <p class="d-inline">
-            Prueba 3: Validación de token/key de usuario. Resultado: <strong id="testresult-3"></strong>
-            <div id="spinner-3" class="spinner-border text-primary" role="status"></div>
-        </p>
+        <p>Prueba 1: Registro de usuario. Resultado: <strong id="testresult-1" class="loader"></strong></p>
+        <p>Prueba 2: Login de usuario. Resultado: <strong id="testresult-2" class="loader"></strong></p>
+        <p>Prueba 3: Validación de token/key de usuario. Resultado: <strong id="testresult-3" class="loader"></strong></p>
     </div>
-    <div class="loader"></div>
 
     <!-- Scripts -->
     <script>
@@ -72,7 +62,7 @@
 
                     // Efectua la llamada a la API
                     const response = await fetchData('../API/api.php/usuarios', 'POST', testData);
-                    document.getElementById('spinner-1').classList.add('d-none');
+                    document.getElementById('testresult-1').classList.remove('loader');
                     if (response.success) {
                         document.getElementById('testresult-1').innerText = '✅ Éxito';
                         document.getElementById('testresult-1').classList.add('text-success');
@@ -80,6 +70,7 @@
                         document.getElementById('testresult-1').innerText = '❌ Fallo: '+ response.error;
                         document.getElementById('testresult-1').classList.add('text-danger');
                     }
+                    testUserLogin();
                 };
                 reader.readAsDataURL(blob);
             })
@@ -94,7 +85,7 @@
                 usr_email: testData.usr_email,
                 usr_pass: testData.usr_pass
             });
-            document.getElementById('spinner-2').classList.add('d-none');
+            document.getElementById('testresult-2').classList.remove('loader');
             if (response.success) {
                 // Guarda el token/key del usuario
                 testData.usr_key = response.success[2];
@@ -104,6 +95,7 @@
                 document.getElementById('testresult-2').innerText = '❌ Fallo: '+ response.error;
                 document.getElementById('testresult-2').classList.add('text-danger');
             }
+            testUserToken();
         }
 
         // Prueba 3: Validación de token/key
@@ -111,7 +103,7 @@
             const response = await fetchData('../API_test/api.php/testkey', 'POST', {
                 key: testData.usr_key
             });
-            document.getElementById('spinner-3').classList.add('d-none');
+            document.getElementById('testresult-3').classList.remove('loader');
             if (response.success) {
                 document.getElementById('testresult-3').innerText = '✅ Éxito';
                 document.getElementById('testresult-3').classList.add('text-success');
@@ -121,18 +113,8 @@
             }
         }
 
-        // Ejecuta las pruebas en orden
-        async function runTests() {
-            // Prueba 1: Registro de usuario
-            await testUserRegistration();
-            // Espera de 2 segundos antes de hacer login con el usuario recién registrado
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            // Prueba 2: Login de usuario
-            await testUserLogin();
-            // Prueba 3: Validación de token/key
-            await testUserToken();
-        }
-        runTests();
+        // Ejecuta las pruebas
+        testUserRegistration()
 
     </script>
 </body>
