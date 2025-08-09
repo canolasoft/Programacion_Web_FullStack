@@ -125,7 +125,7 @@
         async function runTests() {
             // Prueba 1: Registro de usuario
             await testUserRegistration();
-            // Espera de 2 segundos antes de hacer login con el usuario recién registrado
+            // Espera 2 segundos antes de hacer login con el usuario recién registrado
             await new Promise(resolve => setTimeout(resolve, 2000));
             // Prueba 2: Login de usuario
             await testUserLogin();
