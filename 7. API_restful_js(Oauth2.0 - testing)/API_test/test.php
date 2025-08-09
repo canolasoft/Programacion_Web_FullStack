@@ -19,18 +19,18 @@ class Test
 	}
 
 	// Métodos de prueba
-	// Verifica si la clave es correcta
+	// Verifica si el token es correcto
 	public function testKey($key)
 	{
 		// verifico si el token existe y esta vencido
 		$query = "SELECT * FROM access_token WHERE token = '$key' AND fecha_vencimiento > NOW()";
 		$result = mysqli_query($this->conn, $query);
 		if(mysqli_num_rows($result) > 0){
-			// Si el token es valido, retorna true
-			return true;
+			http_response_code(200);
+			return json_encode(["success" => "Token válido"]);
 		} else {
-			// Si el token esta vencido, retorna false
-			return false;
+			http_response_code(400);
+			return json_encode(["error" => "Token inválido o expirado"]);
 		}
 	}
 }

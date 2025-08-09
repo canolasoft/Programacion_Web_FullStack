@@ -25,12 +25,7 @@ switch ($method) {
 		if ($endpoint === '/testkey') {
 			$data = json_decode(file_get_contents('php://input'), true);
 			$result = $testObj->testKey($data['key']);
-			if ($result) {
-				echo json_encode(['success' => true]);
-			} else {
-				http_response_code(401);
-				echo json_encode(['error' => 'Clave incorrecta']);
-			}
+			echo $result;
 		}
 		break;
 	case 'PUT':
